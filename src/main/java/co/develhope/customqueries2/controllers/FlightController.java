@@ -6,13 +6,10 @@ import co.develhope.customqueries2.repositories.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @RestController
 @RequestMapping("/flights")
@@ -22,8 +19,8 @@ public class FlightController {
     private FlightRepository flightRepository;
 
     String generateRandomString(){
-        int leftLimit = 97; // letter 'a'
-        int rightLimit = 122; // letter 'z'
+        int leftLimit = 97; // lettera A
+        int rightLimit = 122; // lettera Z
         int targetStringLength = 10;
         Random random = new Random();
         return random.ints(leftLimit, rightLimit + 1)
@@ -63,10 +60,9 @@ public class FlightController {
     }
 
 
-    @GetMapping("/custom/{p1}/{p2}")
-    public Page<Flight> getCustomFlight(@PathVariable FlightStatus p1, @PathVariable FlightStatus p2){
-        return flightRepository.findAll(PageRequest.of(p1.ordinal(), p2.ordinal(), Sort.by("status").ascending()));
+    @GetMapping("/custom")
+    public List<Flight> getCustomFlight(@RequestParam String p1, @RequestParam String p2) {
+        return flightRepository.getCustomFlight(p1, p2);
     }
-
 
 }
